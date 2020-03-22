@@ -52,7 +52,6 @@ def main(args):
     n_cases = int(args["number"])
     interested = args["list"]
     interested = interested.split(",")
-    interested = [x.capitalize() for x in interested]
 
 
     if not os.path.isdir("./DataSet"):
@@ -121,8 +120,6 @@ def main(args):
 
     v = []
 
-    print(list_country.keys())
-
     ax = plt.axes()
 
     for paese in interested:
@@ -133,7 +130,7 @@ def main(args):
     if n_cases == 0:
         plt.xlabel("Days from January 22, 2020")
     else:
-        plt.xlabel("Days form " + f"{n_cases:,}" + " cases")
+        plt.xlabel("Days from " + f"{n_cases:,}" + " cases event")
 
     ax.yaxis.set_major_formatter(tick.FuncFormatter(kmb_formatter))
     ax.set_yticks(np.linspace(min(v), max(v), num=10))
