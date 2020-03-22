@@ -8,11 +8,20 @@ Visualizer of COVID-19 Cases. Compare the number of cases in different countries
 - `-n` number of reported cases from which the visualization start. If 0 visualize all history
 - `-l` list of countries. Each country should be separeted by a comma, if more than one is present.
 
-### Example
+### Example 2
 
-`python3 COVID-19.py -n 500 -l Italy,US,China`
+`python3 COVID-19.py  -l Italy,US,France,Germany`
 
-This command generate the visualization for Italy, US and China from when each of them has 500 reported cases.
+This command generate the visualization for Italy, US, France, Germany from January 22, 2020.
+![Image 1](https://github.com/edoardoramalli/COVID-19-Visualizer/blob/master/img/img.png)
+
+### Example 2
+
+`python3 COVID-19.py -n 500 -l Italy,US,France,Germany`
+
+This command generate the visualization for Italy, US, France, Germany from when each of them has 500 reported cases.
+So we perform a temporal shift to compare the speed of spread curve.
+![Image 1](https://github.com/edoardoramalli/COVID-19-Visualizer/blob/master/img/img2.png)
 
 ### List of Countries
 |Name|||||||
