@@ -21,7 +21,7 @@ This command generate the visualization for Italy, US, France, Germany from Janu
 
 This command generate the visualization for Italy, US, France, Germany from when each of them has 500 reported cases.
 So we perform a temporal shift to compare the speed of spread curve.
-![Image 1](https://github.com/edoardoramalli/COVID-19-Visualizer/blob/master/img/img2.png)
+![Image 1](https://github.com/edoardoramalli/COVID-19-Visualizer/blob/master/img/img1.png)
 
 ### List of Countries
 |Name|||||||
@@ -49,4 +49,4 @@ So we perform a temporal shift to compare the speed of spread curve.
 |Vietnam	|Zambia	|Zimbabwe|||||||
 
 ### Reference
-The visualizer uses the datat of https://github.com/CSSEGISandData/COVID-19
+The visualizer uses the data from https://github.com/CSSEGISandData/COVID-19
