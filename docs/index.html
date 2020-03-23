@@ -1,0 +1,625 @@
+
+</!DOCTYPE html>
+<html>
+<head>
+    <!-- Follow me on Twitter: @mauriciogior -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+
+    <!-- Primary Meta Tags -->
+    <title>COVID-19 Global Chart</title>
+    <meta name="title" content="COVID-19 Global Chart">
+    <meta name="description" content="Data collected in real time from Hopkins University">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.covid-19-live.com/">
+    <meta property="og:title" content="COVID-19 Global Chart">
+    <meta property="og:description" content="Data collected in real time from Hopkins University">
+    <meta property="og:image" content="https://www.covid-19-live.com/covid19.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.covid-19-live.com/">
+    <meta property="twitter:title" content="COVID-19 Global Chart">
+    <meta property="twitter:description" content="Data collected in real time from Hopkins University">
+    <meta property="twitter:image" content="https://www.covid-19-live.com/covid19.jpg">
+
+    <!-- Generated on https://www.favicon-generator.org/ -->
+    <!-- Icon source: https://freesvg.org/virus-green-color -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://www.covid-19-live.com/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://www.covid-19-live.com/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://www.covid-19-live.com/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://www.covid-19-live.com/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://www.covid-19-live.com/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://www.covid-19-live.com/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://www.covid-19-live.com/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://www.covid-19-live.com/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.covid-19-live.com/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="https://www.covid-19-live.com/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.covid-19-live.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="https://www.covid-19-live.com/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.covid-19-live.com/favicon-16x16.png">
+    <link rel="manifest" href="https://www.covid-19-live.com/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="https://www.covid-19-live.com/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <link href="https://fonts.googleapis.com/css?family=Sen&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/highcharts@8.0.4/css/highcharts.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <style>
+        body {
+            font-family: 'Sen', sans-serif;
+        }
+
+        #app {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart {
+            width: 100%;
+            flex-grow: 1;
+            min-height: 400px;
+        }
+
+        .header h1, .header p {
+            text-align: center;
+        }
+
+        .header p {
+            margin-top: 0px;
+        }
+
+        .menu {
+            width: auto;
+            display: table;
+            margin: 0px auto 21px auto;
+            text-align: center;
+        }
+
+        .menu button {
+            color: #5f27cd;
+            font-size: 14px;
+            padding: 7px 14px;
+            margin: 0 7px 7px 0;
+            border: 1px solid transparent;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: .15s all ease-in;
+            outline: none;
+        }
+
+        .menu button.active {
+            color: #fff;
+            background-color: #5f27cd;
+        }
+
+        .menu button:not(.active):hover {
+            border-color: #5f27cd;
+        }
+
+        input, select {
+            border: 1px solid #5f27cd;
+            border-radius: 100px;
+            padding: 3px 7px;
+        }
+
+        #table {
+            width: 100% !important;
+        }
+
+        #table_wrapper td {
+            text-align: center;
+        }
+
+        .follow-me {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+        }
+
+        .follow-me svg {
+            width: 14px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .follow-me a {
+            color: #00aced;
+            display: inline-block;
+            text-decoration: none;
+            vertical-align: middle;
+            font-size: 12px;
+        }
+
+        h3 {
+            text-align: center;
+        }
+
+        @media(max-width: 800px) {
+            .chart {
+                min-height: 600px;
+            }
+        }
+
+        @media(max-width: 550px) {
+            thead th:nth-child(3), thead th:nth-child(4) {
+                display: none;
+            }
+            tbody td:nth-child(3), tbody td:nth-child(4) {
+                display: none;
+            }
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="header">
+        <h1>COVID-19 Global Chart</h1>
+        <p v-cloak>Data collected in real time from <span><a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">Hopkins University</a></span>.<br/>Last updated: {{lastUpdated}}</p>
+    </div>
+
+    <div class="menu">
+        <button @click="setMode('chartTotalCases')" :class="{active : mode == 'chartTotalCases'}">Cases</button>
+        <button @click="setMode('chartTotalDeaths')" :class="{active : mode == 'chartTotalDeaths'}">Deaths</button>
+        <button @click="setMode('chartTotalRecoveries')" :class="{active : mode == 'chartTotalRecoveries'}">Recoveries</button>
+        <button @click="setMode('fullDataset')" :class="{active : mode == 'fullDataset'}">Full dataset</button>
+    </div>
+
+    <div v-show="mode == 'chartTotalCases'" id="chart-total-cases" class="chart"></div>
+    <div v-show="mode == 'chartTotalDeaths'" id="chart-total-deaths" class="chart"></div>
+    <div v-show="mode == 'chartTotalRecoveries'" id="chart-total-recoveries" class="chart"></div>
+    <div v-show="mode == 'fullDataset'">
+        <h3>Click to download</h3>
+        <a :href="downloads.cases.url" target="_blank">Cases</a>
+        <a :href="downloads.deaths.url" target="_blank">Deaths</a>
+        <a :href="downloads.recoveries.url" target="_blank">Recoveries</a>
+    </div>
+</div>
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.1.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        new Vue({
+            el: "#app",
+            data: {
+                headers: {
+                    date: 0,
+                    location: 1,
+                    count: 2
+                },
+                dataType: {
+                    data: 0,
+                    count: 1
+                },
+                mode: '',
+                cases: [],
+                deaths: [],
+                recoveries: [],
+                loaded: [],
+                downloads: {
+                    cases: {
+                        url: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv?v=' + (new Date().toLocaleDateString()),
+                        downloaded: false
+                    },
+                    deaths: {
+                        url: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv?v=' + (new Date().toLocaleDateString()),
+                        downloaded: false
+                    },
+                    recoveries: {
+                        url: 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv?v=' + (new Date().toLocaleDateString()),
+                        downloaded: false
+                    }
+                }
+            },
+
+            mounted: function() {
+                this.setMode('chartTotalCases');
+            },
+
+            computed: {
+                lang: function() {
+                    var lang = window.navigator.languages ? window.navigator.languages[0] : null;
+                    return lang || window.navigator.language || window.navigator.browserLanguage || window.navigator.userLanguage;
+                },
+
+                lastUpdated: function() {
+                    if (this.chartDataTotalCases.length == 0) return '-';
+                    var world = this.chartDataTotalCases[0];
+                    if (world.data.length == 0) return '-';
+                    return new Date(world.data[world.data.length - 1][0]).toGMTString().split("00:00")[0].trim();
+                },
+
+                totalCases: function() {
+                    if (this.chartDataTotalCases.length == 0) return 0;
+                    var world = this.chartDataTotalCases[0];
+                    if (world.data.length == 0) return 0;
+                    return world.data[world.data.length - 1][1];
+                },
+
+                totalDeaths: function() {
+                    if (this.chartDataTotalDeaths.length == 0) return 0;
+                    var world = this.chartDataTotalDeaths[0];
+                    if (world.data.length == 0) return 0;
+                    return world.data[world.data.length - 1][1];
+                },
+
+                totalRecoveries: function() {
+                    if (this.chartDataTotalRecoveries.length == 0) return 0;
+                    var world = this.chartDataTotalRecoveries[0];
+                    if (world.data.length == 0) return 0;
+                    return world.data[world.data.length - 1][1];
+                },
+
+                chartDataTotalCases: function() {
+                    return this.calculateDataset(this.cases);
+                },
+
+                chartDataTotalDeaths: function() {
+                    return this.calculateDataset(this.deaths);
+                },
+
+                chartDataTotalRecoveries: function() {
+                    return this.calculateDataset(this.recoveries);
+                },
+
+            },
+
+            methods: {
+                download: function(url, arr, callback) {
+                    var self = this;
+
+                    axios.get(url)
+                        .then(function(response) {
+                            self[arr] = self.parse(response.data);
+                            callback();
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            alert('Something went wrong');
+                        });
+                },
+
+                chart: function(id, title, subtitle, dataset) {
+                    this.$nextTick(function() {
+                        var legend = {};
+                        var button = {
+                            linear: {
+                                align: 'right',
+                                x: -110,
+                                y: 65
+                            },
+                            logarithmic: {
+                                align: 'right',
+                                x: -20,
+                                y: 65
+                            }
+                        };
+                        if (window.innerWidth > 800) {
+                            legend = {
+                                layout: 'vertical',
+                                align: 'right',
+                                verticalAlign: 'middle'
+                            };
+                            button = {
+                                linear: {
+                                    align: 'left',
+                                    x: 20
+                                },
+                                logarithmic: {
+                                    align: 'left',
+                                    x: 70
+                                }
+                            };
+                        }
+                        Highcharts.chart(id, {
+                            chart: {
+                                zoomType: 'x',
+                                style: {
+                                    fontFamily: "'Sen', sans-serif"
+                                }
+                            },
+                            exporting: {
+                                buttons: {
+                                    customButton: {
+                                        text: 'Linear',
+                                        align: button.linear.align,
+                                        x: button.linear.x,
+                                        y: button.linear.y,
+                                        onclick: function() {
+                                            this.yAxis[0].update({
+                                                type: 'linear'
+                                            });
+                                        }
+                                    },
+                                    customButton2: {
+                                        text: 'Logarithmic',
+                                        align: button.logarithmic.align,
+                                        x: button.logarithmic.x,
+                                        y: button.logarithmic.y,
+                                        onclick: function() {
+                                            console.log(this);
+                                            this.yAxis[0].update({
+                                                type: 'logarithmic'
+                                            });
+                                        }
+                                    }
+                                }
+                            },
+
+                            title: {
+                                text: title
+                            },
+
+                            subtitle: {
+                                text: subtitle
+                            },
+
+                            legend: legend,
+
+                            xAxis: {
+                                type: 'datetime'
+                            },
+
+                            series: dataset
+                        });
+                    });
+                },
+
+                chartTotalCases: function() {
+                    if (this.loaded.indexOf('chartTotalCases') !== -1) return;
+                    this.loaded.push('chartTotalCases');
+
+                    var self = this;
+                    var totalCases = this.totalCases;
+                    this.chart(
+                        'chart-total-cases',
+                        'Total cases: ' + this.formatNumber(totalCases),
+                        'Showing countries with more than 5% of total cases in the world',
+                        this.chartDataTotalCases.map(function(serie) {
+                            var total = 0;
+                            if (serie.data.length > 0) {
+                                total = serie.data[serie.data.length - 1][1];
+                            }
+
+                            if ((total * 100 / totalCases) <= 5) {
+                                serie.visible = false;
+                            }
+
+                            return serie;
+                        })
+                    );
+                },
+
+                chartTotalDeaths: function() {
+                    if (this.loaded.indexOf('chartTotalDeaths') !== -1) return;
+                    this.loaded.push('chartTotalDeaths');
+
+                    var self = this;
+                    var totalDeaths = this.totalDeaths;
+                    this.chart(
+                        'chart-total-deaths',
+                        'Total deaths: ' + this.formatNumber(totalDeaths),
+                        'Showing countries with more than 5% of total deaths in the world',
+                        this.chartDataTotalDeaths.map(function(serie) {
+                            var total = 0;
+                            if (serie.data.length > 0) {
+                                total = serie.data[serie.data.length - 1][1];
+                            }
+
+                            if ((total * 100 / totalDeaths) <= 5) {
+                                serie.visible = false;
+                            }
+
+                            return serie;
+                        })
+                    );
+                },
+
+                chartTotalRecoveries: function() {
+                    if (this.loaded.indexOf('chartTotalRecoveries') !== -1) return;
+                    this.loaded.push('chartTotalRecoveries');
+
+                    var self = this;
+                    var totalRecoveries = this.totalRecoveries;
+                    this.chart(
+                        'chart-total-recoveries',
+                        'Total recoveries: ' + this.formatNumber(totalRecoveries),
+                        'Showing countries with more than 5% of total recoveries in the world',
+                        this.chartDataTotalRecoveries.map(function(serie) {
+                            var _new = 0;
+                            if (serie.data.length > 0) {
+                                _new = serie.data[serie.data.length - 1][1];
+                            }
+
+                            if ((_new * 100 / totalRecoveries) <= 5) {
+                                serie.visible = false;
+                            }
+
+                            return serie;
+                        })
+                    );
+                },
+
+                fullDataset: function() {
+                    if (this.loaded.indexOf('fullDataset') !== -1) return;
+                    this.loaded.push('fullDataset');
+
+                    this.$nextTick(function() {
+                        $("#table").DataTable();
+                    });
+                },
+
+                formatNumber: function(number) {
+                    return parseFloat(number).toLocaleString(this.lang, { minimumFractionDigits: 0 });
+                },
+
+                parse: function(dataString) {
+                    var results = Papa.parse(dataString).data;
+                    var columns = results[0];
+                    // Remove columns we don't need
+                    columns.shift(); // Province
+                    columns.shift(); // Country
+                    columns.shift(); // Lat
+                    columns.shift(); // Long
+
+                    for (var i in columns) {
+                        columns[i] = new Date(columns[i]).toISOString().split('T')[0]
+                    }
+
+                    results.shift();
+                    var filteredResults = [];
+                    var parsedResults = [];
+                    var countries = {};
+
+                    // Merge countries
+                    for (var i in results) {
+                        results[i].shift(); // removes first
+                        var country = results[i][0]; // get country
+                        var has = false;
+
+                        for (var j in filteredResults) {
+                            if (filteredResults[j][0] == country) {
+                                for (var k = 4; k < results[i].length; k++) {
+                                    filteredResults[j][k] = parseInt(filteredResults[j][k]) + parseInt(results[i][k]);
+                                }
+                                has = true;
+                                break;
+                            }
+                        }
+                        if (!has) {
+                            filteredResults.push(results[i]);
+                        } else {
+                        }
+                    }
+
+                    for (var i in filteredResults) {
+                        var data = filteredResults[i];
+                        var country = data[0]; // get country
+                        data.shift(); // removes country
+                        data.shift(); // Lat
+                        data.shift(); // Long
+
+                        for (var j in data) {
+                            parsedResults.push([
+                                columns[j], country, data[j]
+                            ]);
+                        }
+                    }
+
+                    return parsedResults;
+                },
+
+                calculateDataset: function(dataset) {
+                    var self = this;
+                    var locations = [];
+                    var chartData = [];
+                    var worldData = [];
+
+                    dataset.map(function(point) {
+                        var index = locations.indexOf(point[self.headers.location]);
+                        if (index === -1) {
+                            if (point[self.headers.location] === "World") return;
+
+                            locations.push(point[self.headers.location]);
+                            chartData.push({
+                                name: point[self.headers.location],
+                                data: []
+                            });
+                            index = chartData.length - 1;
+                        }
+
+                        var date = Date.parse(point[self.headers.date]);
+                        var count = parseInt(point[self.headers.count] || 0);
+
+                        chartData[index].data.push([date, count]);
+
+                        var worldIndex = -1;
+                        for (var i in worldData) {
+                            if (worldData[i][0] == date) {
+                                worldIndex = i; break;
+                            }
+                        }
+
+                        if (worldIndex === -1) {
+                            worldData.push([date, count]);
+                        } else {
+                            worldData[worldIndex][self.dataType.count] += count;
+                        }
+                    });
+
+                    worldData.sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    chartData.push({
+                        name: "World",
+                        data: worldData
+                    });
+
+                    var data = chartData.map(function(location) {
+                        var total = 0;
+                        if (location.data.length > 0) {
+                            total = location.data[location.data.length - 1][self.dataType.count];
+                        }
+                        return {
+                            name: location.name + " (" + self.formatNumber(total) + ")",
+                            data: location.data.map(function(point) {
+                                return [ point[0], point[self.dataType.count]];
+                            })
+                        };
+                    });
+
+                    data.sort(function(a, b) {
+                        return (b.data.length > 0 ? b.data[b.data.length - 1][1] : 0) -
+                            (a.data.length > 0 ? a.data[a.data.length - 1][1] : 0);
+                    });
+
+                    return data;
+                },
+
+                setMode: function(mode) {
+                    if (this.mode == mode) return;
+                    this.mode = mode;
+                    var self = this;
+                    var callback = function() {
+                        var fn = self[mode];
+                        if (typeof fn === "function") fn();
+                    };
+
+                    if (mode == 'chartTotalCases') {
+                        if (this.downloads.cases.downloaded) callback();
+                        else this.download(this.downloads.cases.url, 'cases', callback);
+                        this.downloads.cases.downloaded = true;
+                    } else  if (mode == 'chartTotalDeaths') {
+                        if (this.downloads.deaths.downloaded) callback();
+                        else this.download(this.downloads.deaths.url, 'deaths', callback);
+                        this.downloads.deaths.downloaded = true;
+                    } else  if (mode == 'chartTotalRecoveries') {
+                        if (this.downloads.recoveries.downloaded) callback();
+                        else this.download(this.downloads.recoveries.url, 'recoveries', callback);
+                        this.downloads.recoveries.downloaded = true;
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
