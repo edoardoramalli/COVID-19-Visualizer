@@ -1,11 +1,18 @@
 import hashlib
 import urllib.request
 import os
-from datetime import datetime
+import datetime
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tick
 import numpy as np
 import argparse
+
+
+def strip_date(date):
+    month = int(date[0:date.find("/")])
+    day = int(date[date.find("/")+1:date.rfind("/")])
+    year = int(date[date.rfind("/")+1:])
+    return month, day, 2000 + year
 
 
 def kmb_formatter(x, pos):
@@ -33,7 +40,7 @@ class Country:
 
     def get_first_data(self, n=0):
         d = list(self.confirmed_case.keys())
-        d.sort(key=lambda date: datetime.strptime(date, "%m/%d/%y"))
+        d = sorted(d)
         for data in d:
             if self.confirmed_case[data] >= n:
                 return data
@@ -41,7 +48,7 @@ class Country:
     def ordered_list_confirmed(self, n=0):
         first = self.get_first_data(n)
         d = list(self.confirmed_case.keys())
-        d.sort(key=lambda date: datetime.strptime(date, "%m/%d/%y"))
+        d = sorted(d)
         tmp = []
         for data in d[d.index(first):]:
             tmp.append(self.confirmed_case[data])
@@ -65,7 +72,8 @@ def main(args):
 
     try:
         urllib.request.urlretrieve("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/"
-                                   "csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
+                                   "csse_covid_19_data/csse_covid_19_time_series/"
+                                   "time_series_covid19_confirmed_global.csv",
                                    confirmed_temp_path
                                    if os.path.isfile(confirmed_final_path)
                                    else confirmed_final_path)
@@ -83,10 +91,14 @@ def main(args):
         print("URL Error")
 
     list_country = {}
+    list_dates = []
 
     with open(confirmed_final_path, 'r') as file:
 
-        list_dates = file.readline().strip('\n').split(',')[4:]
+        list_dates_tmp = file.readline().strip('\n').split(',')[4:]
+        for x in list_dates_tmp:
+            m,d,y = strip_date(x)
+            list_dates.append(datetime.date(y,m,d))
 
         for line in file:
             if line.startswith('#'):
@@ -104,7 +116,10 @@ def main(args):
             confirmed = {}
 
             for i in range(0, len(list_dates)):
-                confirmed[list_dates[i]] = int(sp_line[i+4])
+                try:
+                    confirmed[list_dates[i]] = int(sp_line[i+4].replace(",", ""))
+                except ValueError:
+                    print("Item not valid, ", country, " - ", list_dates[i])
 
             if country in list_country.keys():
                 old_confirmed = list_country[country].confirmed_case
@@ -122,15 +137,16 @@ def main(args):
 
     ax = plt.axes()
 
+
     for paese in interested:
         tmp = list_country[paese].ordered_list_confirmed(n_cases)
         v += tmp
         plt.plot(range(0, len(tmp)), tmp, "--o", label=paese, axes=ax)
 
     if n_cases == 0:
-        plt.xlabel("Days from January 22, 2020")
+        plt.xlabel("Days from January 22, 2020 - " + str(list_dates[-1]))
     else:
-        plt.xlabel("Days from " + f"{n_cases:,}" + " cases event")
+        plt.xlabel("Days from " + f"{n_cases:,}" + " cases event - " + str(list_dates[-1]))
 
     ax.yaxis.set_major_formatter(tick.FuncFormatter(kmb_formatter))
     ax.set_yticks(np.linspace(min(v), max(v), num=10))
